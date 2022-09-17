@@ -1,8 +1,10 @@
+Основываясь на тестах с сайта
+В1 >= B2 > B3 (сравнение по скорости и памяти)
 /*
 1й Вариант решения через очередь, хранящая эл из nums1 который меньше nums2 - в худшем случае будет иметь n 
   - работает чуть-чуть медленнее
   + экономичнее по памяти, чем второй вариант
-  ((3й вариант)так же есть возможность добавить nums2 в nums1 и отсортировать - самый эффективный вариант по памяти, но может быть дольше по времени)
+ 
 */
 void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
     int a = 0, b = 0;
@@ -103,3 +105,42 @@ void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
         }
         nums1 = answ;
     }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ (3й вариант)так же есть возможность добавить nums2 в nums1 и отсортировать
+ - может быть не самым эффективном по памяти при вызове рекурсии
+ + как показали результаты тестов не самый эффективный по скорости
+class Solution {
+public:
+    template <class T>
+void quick_sort(T & arr, size_t L, size_t R ){ //
+    if(R - L < 2){return;}
+    int base = arr[ (R + L) / 2];
+    size_t x = L, y = L;
+    for(size_t i = L; i < R; ++i){
+        if(arr[i] < base){
+            swap(arr[x], arr[i]);
+            if(x != y){
+                swap(arr[y], arr[i]);
+            }
+            ++x; ++y;
+        }
+        else{
+            if(arr[i] == base){
+                swap(arr[y],arr[i]);
+                ++y;
+            }
+        }
+    }
+    quick_sort(arr, L, x);
+    quick_sort(arr, y, R);
+}
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        for(int i = m; i < n+m; ++i ){
+            nums1[i] = nums2[i - m];
+        }
+        quick_sort(nums1, 0, n+m);
+    //nums1 = answ;
+    //end
+}
+};
